@@ -5,25 +5,25 @@
 
 - [Alastria Core Technical Platform](#alastria-core-technical-platform)
     - [Requirements and challenges for a country blockchain network](#requirements-and-challenges-for-a-country-blockchain-network)
-- [1. Objective](#1-objective)
-- [2. Introduction](#2-introduction)
-- [3. General characteristics of the main blockchain technologies](#3-general-characteristics-of-the-main-blockchain-technologies)
-- [3. The Public-Permissionless blockchain networks](#3-the-public-permissionless-blockchain-networks)
-    - [3.1. The problem of Scalability of Public-Permissioned blockchains](#31-the-problem-of-scalability-of-public-permissioned-blockchains)
-    - [3.2. The problem of Transaction Costs: High and Volatile](#32-the-problem-of-transaction-costs--high-and-volatile)
+- [Objective](#objective)
+- [Introduction](#introduction)
+- [General characteristics of the main blockchain technologies](#general-characteristics-of-the-main-blockchain-technologies)
+    - [Different transaction execution models](#different-transaction-execution-models)
+    - [The problem of Scalability of Public-Permissioned blockchains](#the-problem-of-scalability-of-public-permissioned-blockchains)
+    - [3.2. The problem of Transaction Costs: High and Volatile](#32-the-problem-of-transaction-costs-high-and-volatile)
     - [3.3. The problem of Privacy](#33-the-problem-of-privacy)
         - [3.3.1. Confidentiality of Data](#331-confidentiality-of-data)
         - [3.3.2. Privacy of Transactional Activity](#332-privacy-of-transactional-activity)
 - [4. THE PRIVATE CONSORTIUM BLOCKCHAIN NETWORKS](#4-the-private-consortium-blockchain-networks)
-    - [4.1. A different “Trust trade-off”](#41-a-different-trust-trade-off)
+    - [4.1. A different “Trust trade-off”](#41-a-different-%E2%80%9Ctrust-trade-off%E2%80%9D)
     - [4.2. A different incentivisation model for operating nodes](#42-a-different-incentivisation-model-for-operating-nodes)
     - [4.3 A different Transaction execution model](#43-a-different-transaction-execution-model)
-- [5. ALASTRIA: A PUBLIC-PERMISSIONED BLOCKCHAIN NETWORK](#5-alastria--a-public-permissioned-blockchain-network)
+- [5. ALASTRIA: A PUBLIC-PERMISSIONED BLOCKCHAIN NETWORK](#5-alastria-a-public-permissioned-blockchain-network)
 - [6. GENERAL REQUIREMENTS ABOUT THE SOFTWARE](#6-general-requirements-about-the-software)
     - [6.1. Based on OpenSource of wide acceptance in the market](#61-based-on-opensource-of-wide-acceptance-in-the-market)
     - [6.2. The ecosystem of users of the software should be as wide as possible](#62-the-ecosystem-of-users-of-the-software-should-be-as-wide-as-possible)
     - [6.3. Alastria should be based on general-purpose and multi-industry platforms](#63-alastria-should-be-based-on-general-purpose-and-multi-industry-platforms)
-    - [6.4. Alastria will allow and facilitate regulatory compliance by the members, in particular:](#64-alastria-will-allow-and-facilitate-regulatory-compliance-by-the-members--in-particular)
+    - [6.4. Alastria will allow and facilitate regulatory compliance by the members, in particular:](#64-alastria-will-allow-and-facilitate-regulatory-compliance-by-the-members-in-particular)
 - [7. REFERENCE ARCHITECTURE OF A BLOCKCHAIN](#7-reference-architecture-of-a-blockchain)
     - [7.1. Infrastructure layer](#71-infrastructure-layer)
         - [7.1.1. Data Storage](#711-data-storage)
@@ -81,10 +81,10 @@
 
 <!-- /TOC -->
 
-# 1. Objective
+# Objective
 This document describes the requirements and challenges for a country blockchain network like Alastria. While the document tries to be as technology-agnostic as possible, there are subjects where we have to focus on a given technology, and when this is the case, we discuss the initial implementation using Quorum. However, the intention is to include specific analyses for other technologies like Hyperledger.  This document is live and continuously evolving, describing the current situation of the technology with respect to the requirements and the challenges that have to be solved.
 
-# 2. Introduction
+# Introduction
 
 Alastria is a Spanish nonprofit association with the objective to create the first multi-industry national blockchain network, to support transactions with full legal validity, and with appropriate levels of privacy.
 
@@ -94,13 +94,13 @@ The associates of Alastria are collaborating with each other in the definition, 
 
 Being a country-wide blockchain network, Alastria is neither a public-permissionless network nor a private consortium. Alastria shares some of the properties of both types of networks, but it has some requirements of its own. This document is structured as follows:
 * The first two sections describe the general characteristics of Public-Permissionless and Consortium blockchains and the problems that they present for a network like Alastria
-* Then we describe the specific requirements of Alastria, using as a scheme and guiding theme a general Reference Architecture of blockchains systems
+* Then we describe the specific requirements of Alastria, using as a scheme and guiding theme a general Reference Architecture of blockchain systems
 
-# 3. General characteristics of the main blockchain technologies
+# General characteristics of the main blockchain technologies
 
-Distributed fault tolerant protocols have been deployed traditionally at relatively small scale, and typically in a single administrative domain (that is, inside a single legal company) where adversarial attacks can be minimized and so they are not a primary concern.
+Distributed fault tolerant protocols have been deployed traditionally at relatively small scale, and typically in a single administrative domain, that is, inside a single legal entity like a bank or insurance company. Even the biggest distributed systems in the world (like Google, Amazon, Facebook, Apple, ...) are still managed and administered by a single entity with aboslute control over them. In these environments, adversarial attacks among internal servers can be minimized using traditional techniques and so they are not a primary concern.
 
-[Bitcoin](https://bitcoin.org/bitcoin.pdf) was the first practical system to solve the problem of fault tolerant distributed computing in a completely public and anonymous environment where anonymous malicious adversaries could behave in a [Byzantine](https://en.wikipedia.org/wiki/Byzantine_fault_tolerance) way to try to make the network malfunction.
+[Bitcoin](https://bitcoin.org/bitcoin.pdf) was the first practical system to solve the problem of fault tolerant distributed computing in a completely public and anonymous environment where anonymous malicious adversaries could behave in a [Byzantine](https://en.wikipedia.org/wiki/Byzantine_fault_tolerance) way controlling network nodes and trying to make the network malfunction.
 
 Possibly the major invention of the Bitcoin system was to design a consensus mechanism with an embedded digital currency, where agreement on the order of transactions is negotiated via an economically incentivized cryptographic random lottery based on partial hash collisions. This novel consensus algorithm was called Proof-of-Work (PoW), reflecting the idea that in order to win the lottery, the nodes had to use a lot of computational resources to solve the cryptographic puzzle used for the lottery.
 
@@ -116,7 +116,7 @@ The [Bitcoin](https://bitcoin.org/bitcoin.pdf) and [Ethereum](https://www.ethere
 
 Soon, the underlying technology powering these systems started to find applicability in other environments where the requirements for decentralization were not so high, even though it was required a high level of collaboration among peers (typically enterprises), higher than what was possible with the current centralized technologies. A set of distributed systems started to appear with some characteristics that were not possible before, with numerous fields of application and with enormous potential for innovation.
 
-A class of these systems is what is known as Private Consortiums Blockchains, because they have the objective to improve efficiency in the creation of consortiums or groups of companies and entities, without the existence of centra entities which operate a centralized database or transactional system, acting as the central point to which all other entities have to connect. In this sense, we can say that private consortium blockchains allow the implementation of the P2P paradigm among companies, instead of among individuals, as it was the original objective of Bitcoin.
+A class of these systems is what is known as Private Consortium Blockchains, because they have the objective to improve efficiency in the creation of consortiums or groups of companies and entities, without the existence of central entities which operate a centralized database or transactional system, acting as the central point to which all other entities have to connect. In this sense, we can say that private consortium blockchains allow the implementation of the P2P paradigm among companies, instead of among individuals, as it was the original objective of Bitcoin.
 
 Two of the most widely used technologies for private consortiums are Quorum and Hyperledger Fabric (or simply Fabric).
 In order to understand the pros and cons of the different technologies, it is first convenien to analyze some of the characteristics of blockchain systems, public and private, and how Ethereum, Quorum and Fabric approach each of those characteristics.
@@ -129,26 +129,34 @@ In the following sections, we analyze the different tecnologies according to the
 * Privacy
 * Safety
 
-# 3. The Public-Permissionless blockchain networks
+## Different transaction execution models
 
-Distributed fault tolerant protocols have been deployed traditionally at relatively small scale, and typically in a single administrative domain (that is, inside a single legal company) where adversarial attacks can be minimized and so they are not a primary concern.
+In general, in public-permissionless blockchain networks like Bitcoin and Ethereum there are essentially two mechanisms that ensure the safety property of the network:
+1. All transactions are executed and validated in all participating nodes in a deterministic way.
+2. There is a consensus algorithm used to ensure that all nodes agree on the same order of transactions, so they are executed in exactly the same order in all the nodes.
 
-[Bitcoin](https://bitcoin.org/bitcoin.pdf) was the first practical system to solve the problem of fault tolerant distributed computing in a completely public and anonymous environment where anonymous malicious adversaries could behave in a [Byzantine](https://en.wikipedia.org/wiki/Byzantine_fault_tolerance) way to try to make the network malfunction.
+In general, in this type of networks (and Quorum is not an exception as it inherits these characteristics from Ethereum), the lifecycle of transactions is similar, from 
 
-Possibly the major invention of the Bitcoin system was to design a consensus mechanism with an embedded digital currency, where agreement on the order of transactions is negotiated via an economically incentivized cryptographic random lottery based on partial hash collisions. This novel consensus algorithm was called Proof-of-Work (PoW), reflecting the idea that in order to win the lottery, the nodes had to use a lot of computational resources to solve the cryptographic puzzle used for the lottery.
+En general, en este tipo de redes (y Quorum no es una excepción), el ciclo de vida de las transacciones es similar, desde que son inyectadas en la red blockchain hasta que son registradas por todos los nodos y se actualiza el estado en cada uno de ellos. A alto nivel, ese ciclo de vida es el mismo independientemente del algoritmo de consenso que se utilice.
+En cambio, Fabric tiene un ciclo de vida de las transacciones completamente diferente, pensado desde el principio para consorcios privados.
+A continuación analizamos estos dos modelos de ciclo de vida de la ejecución de las transacciones y algunas implicaciones en las características más relevantes de los sistemas blockchain resultantes.
 
-Apart from enabling the consensus on the order of transactions, the PoW mechanism provides two additional benefits: on one hand it protects the system from Sybil attacks (especially difficult to avoid in public-permissionless networks), and on the other it creates a very good incentivisation mechanism for promoting anonymous participants to dedicate expensive computing resources to execute the consensus algorithm required for the operation of the network and ensuring safety.
+For example, in Ethereum the transactions are first validated (via their execution) in the miner/minter nodes, the one node that wins the cryptographic lottery decides the order of transactions in the block, and then all the other nodes in the network execute all the transactions in the block in the order specified by the winner. This is referred to as the “order-execute” model.
 
-The [Bitcoin](https://bitcoin.org/bitcoin.pdf) and [Ethereum](https://www.ethereum.org/) systems are very robust and they operate successfully in a highly adversarial environment, where highly-motivated and malicious attacks are commonplace, and does so in spite of the anonymity of the entities operating the nodes in a fully decentralized way. This is the reason why the system is many times referred to as the “Trustless machine”.
+Indeed, the existence of an algorithm to reach consensus on the order of transactions is not exclusive to public-permissionless networks and is required in all types of blockchain networks,  though they may differ in the implementation.
+However, in private consortiums and in order to achieve privacy, among other things, it is not required that all transactions are executed in all nodes of the network.
 
-A brief note on terminology: we refer to these types of networks as "Public-Permissionless" to stress the fact that the participants do not need to request permission to anybody in order to participate in the network. It is very common in the literature to drop the "Permissionless" word and just use "Public" to mean both accessible to anybody and without the need to request permission.
+For example, in Quorum, private transactions are only executed in the nodes which are privy to the transaction (those specified in the “privateFor” parameter). In addition, the payload of private transactions is only stored in those nodes and is never sent or replicated to any other node in the network, and private transactions can only modify the so-called “private state” which is different in each node and depends on the actual private transactions where each node has participated. Public transactions in Quorum follow exactly the same model as in standard Ethereum.
 
-However, in other contexts, the word "Public" does not necessarily imply the anonymous access to the services provided in a public manner. For example, in order to access to the public health services of a country, their citizens normally have to identify themselves to the entity providing the service. In those other contexts there are many examples of both Public-anonymous and Public-identified provision of public services.
+In contrast to public state, safety of private state data can only be ensured indirectly: even though private transactions are executed in just a reduced number of nodes in the network, the transactions are included in the blocks that are stored in the blockchain in all nodes. The transaction in the block does not include the payload nor the transaction results. A node that did not participate in the private transaction can not verify the transaction by executing it, but all nodes that did participate in the transaction can replay it and given the deterministic nature of the EVM, they can asume that if the initial states were the same
 
-Indeed, we will see that Alastria has the objective of being a Public-Permissioned network, in the sense that is is open to all entities in Spain, but it is permissioned so the entities have to be identified.
 
-## 3.1. The problem of Scalability of Public-Permissioned blockchains
-However, achieving this level of robustness in such a hostile environment can not be made without some compromises. Those compromises are better illustrated using the words of Vitalik Buterin describing the **“Blockchain trilemma”**. The trilemma claims that blockchain systems can only at most have two of the following three properties:
+
+
+
+## The problem of Scalability of Public-Permissioned blockchains
+
+However, this level of robustness in such a hostile environment can not be achieved without some compromises. Those compromises are better illustrated using the words of Vitalik Buterin describing the **“Blockchain trilemma”**. The trilemma claims that blockchain systems can only at most have two of the following three properties:
 * **Decentralization**, defined as the system being able to run in a scenario where each participant only has access to O(c) resources, where c refers to the size of computational resources available to each node (ie. a regular laptop or small VPS).
 * **Scalability**, defined as being able to process O(n) > O(c) transactions, where n refers to the size of the ecosystem in some abstract sense.
 * **Security (or Safety)**, defined as being secure against attackers with up to O(n) resources
@@ -164,6 +172,8 @@ As Figure 1 describes, the prevailing public-permissionless blockchain networks 
 ***
 
 ![Trust Continuum](/assets/Trust%20continuum_%20trustless%20vs%20centralized.jpg)
+
+
 <p align="center"><b>Fig1. - The Trust Continuum.</b></p>
 
 ***
