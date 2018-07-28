@@ -9,6 +9,7 @@
 - [Introduction](#introduction)
 - [General characteristics of the main blockchain technologies](#general-characteristics-of-the-main-blockchain-technologies)
     - [Different transaction execution models](#different-transaction-execution-models)
+        - ["Order-Execute" model (Ethereum, Quorum and other Ethereum derivatives)](#%22order-execute%22-model-ethereum-quorum-and-other-ethereum-derivatives)
     - [The problem of Scalability of Public-Permissioned blockchains](#the-problem-of-scalability-of-public-permissioned-blockchains)
     - [3.2. The problem of Transaction Costs: High and Volatile](#32-the-problem-of-transaction-costs-high-and-volatile)
     - [3.3. The problem of Privacy](#33-the-problem-of-privacy)
@@ -135,11 +136,36 @@ In general, in public-permissionless blockchain networks like Bitcoin and Ethere
 1. All transactions are executed and validated in all participating nodes in a deterministic way.
 2. There is a consensus algorithm used to ensure that all nodes agree on the same order of transactions, so they are executed in exactly the same order in all the nodes.
 
-In general, in this type of networks (and Quorum is not an exception as it inherits these characteristics from Ethereum), the lifecycle of transactions is similar, from 
+In general, in this type of networks (and Quorum is not an exception as it inherits these characteristics from Ethereum), the lifecycle of transactions is similar, from the moment they are injected into the network until they are registered by all the nodes and the global state is updated in each of them. At a sufficiently high level, this lifecycle is the same independently of the specific consensus algorithm used.
 
-En general, en este tipo de redes (y Quorum no es una excepción), el ciclo de vida de las transacciones es similar, desde que son inyectadas en la red blockchain hasta que son registradas por todos los nodos y se actualiza el estado en cada uno de ellos. A alto nivel, ese ciclo de vida es el mismo independientemente del algoritmo de consenso que se utilice.
-En cambio, Fabric tiene un ciclo de vida de las transacciones completamente diferente, pensado desde el principio para consorcios privados.
-A continuación analizamos estos dos modelos de ciclo de vida de la ejecución de las transacciones y algunas implicaciones en las características más relevantes de los sistemas blockchain resultantes.
+Instead, Fabric has a completely different transaction lifecycle, designed from the beginning for private consortiums.
+
+In the following sections we analize these two models of transaction execution lifecycle, and some of the most important consequences for the resulting blockchain systems.
+
+### "Order-Execute" model (Ethereum, Quorum and other Ethereum derivatives)
+
+In Ethereum the generic transaction execution model is the following:
+1. **Creation and propagation of transactions**: The client applications (external to the blockchain) inject transactions using the APIs provided by the different participating nodes in the network (like the JSON-RPC mechanism provided by Geth).
+The transactions are not yet executed, and they are distributed to all the network nodes uin a"best effort" using the P2P (Peer-to-Peer) tranport mechanism. That is, there are not strong guaranties that at a given moment all the nodes have the same transactions, but there is a high probability that in that same moment all the nodes share a big subset of the whole subset of th etransactions in the network.
+2. **Selection of the node that orders the transactions, creates the block and propagates it to the network**: Ethereum uses a system that could be defined as a "cryptographic lottery" (PoW), where the winner node decides which transactions and in which order are included in the next block. Basically, the winner node selects arbitrarily the transactions that it wants to include in the block, executes them in a given order and includes them in the block. Afterwards, the block is distributed to the network using the P2P transport mechanism.
+3. **Transaction execution and global state update**: each node receiving the block executes all its transactions exactly in the same order in which they are in the block, updating the global state and adding the blcok to the blockchain
+
+This model can be denominated in general as **"Order-Execute"** (abbreviated as **OE**), because with the exception of some differences in step 2 (selection of the node which creates the blocks), practically all variants of Ethereum have in common that the ordering of the transactions is performed before their execution by the rest of the nodes in the network.
+
+For example, in PoS (Proof of Stake) or PoA (Proof of Authority), the difference is that in step 2 the selection of the node that orders transactions and creates the block uses a different criteria which is more efficient than PoW. The rest is the same.
+
+
+===========================================================
+Si el algoritmo de consenso es Istanbul BFT (como en Quorum), hay dos modificaciones en el paso 2:
+El nodo que crea el bloque (nodo líder) se selecciona entre un conjunto perfectamente identificado de nodos llamados Validadores. En la implementación actual de IBFT se pueden elegir dos criterios: 1) Sticky, es decir que una vez se elige un nodo no se cambia hasta que el nodo falla por alguna razón, y 2) Round-robin, donde cada nodo validador asume secuencialmente en cada bloque el papel de líder según un orden prefijado.
+La propuesta de bloque del nodo líder se distribuye sólo a los otros nodos validadores, y éstos votan la propuesta antes de que el bloque se distribuya a toda la red. Se requiere un quorum mayor a ⅔ de los nodos validadores para que se acepte la propuesta del nodo líder.
+Si el algoritmo de consenso es Istanbul BFT (como en Quorum), hay dos modificaciones en el paso 2:
+El nodo que crea el bloque (nodo líder) se selecciona entre un conjunto perfectamente identificado de nodos llamados Validadores. En la implementación actual de IBFT se pueden elegir dos criterios: 1) Sticky, es decir que una vez se elige un nodo no se cambia hasta que el nodo falla por alguna razón, y 2) Round-robin, donde cada nodo validador asume secuencialmente en cada bloque el papel de líder según un orden prefijado.
+La propuesta de bloque del nodo líder se distribuye sólo a los otros nodos validadores, y éstos votan la propuesta antes de que el bloque se distribuya a toda la red. Se requiere un quorum mayor a ⅔ de los nodos validadores para que se acepte la propuesta del nodo líder.
+
+
+===========================================================
+
 
 For example, in Ethereum the transactions are first validated (via their execution) in the miner/minter nodes, the one node that wins the cryptographic lottery decides the order of transactions in the block, and then all the other nodes in the network execute all the transactions in the block in the order specified by the winner. This is referred to as the “order-execute” model.
 
